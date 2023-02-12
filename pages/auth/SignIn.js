@@ -2,20 +2,48 @@ import React from 'react'
 import { SafeAreaView, StyleSheet, Text } from 'react-native'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
+import { Formik } from 'formik'
 
 const SignIn = ({ navigation }) => {
+
+    const initialValues = {
+        usermail: '',
+        password: '',
+        repassword: ''
+    }
 
     const handleLogin = () => {
         navigation.goBack();
     }
+
+    const handleFormSubmit = (formValues) => {
+        console.log(formValues)
+    }
     return (
         <SafeAreaView>
             <Text style={styles.header}>bana ne?</Text>
-            <Input placeholder='E-posta adresi giriniz...' />
-            <Input placeholder='Şifre giriniz...' />
-            <Input placeholder='Şifre tekrar giriniz...' />
-            <Button text={'Kayıt Ol'} />
-            <Button text={'Geri'} onPress={handleLogin} />
+
+            <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
+                {({ values, handleChange, handleSubmit }) => (
+                    <>
+                        <Input
+                            placeholder='E-posta adresi giriniz...'
+                            value={values.usermail}
+                            onChangeText={handleChange('usermail')} />
+                        <Input
+                            placeholder='Şifre giriniz...'
+                            value={values.password}
+                            onChangeText={handleChange('password')} />
+                        <Input
+                            placeholder='Şifreyi tekrar giriniz...'
+                            value={values.repassword}
+                            onChangeText={handleChange('repassword')} />
+                        <Button text={'Kayıt Ol'} onPress={handleSubmit} />
+                    </>
+                )}
+            </Formik>
+
+            <Button text={'Geri'} onPress={handleLogin}/>
         </SafeAreaView>
     )
 }
