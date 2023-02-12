@@ -4,6 +4,9 @@ import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import { Formik } from 'formik'
 
+import { register } from '../../firebase'
+
+
 const SignIn = ({ navigation }) => {
 
     const initialValues = {
@@ -16,8 +19,13 @@ const SignIn = ({ navigation }) => {
         navigation.goBack();
     }
 
-    const handleFormSubmit = (formValues) => {
+    const handleFormSubmit = async (formValues) => {
         console.log(formValues)
+
+        const user = await register(formValues.usermail, formValues.password)
+        console.log(user)
+        
+
     }
     return (
         <SafeAreaView>
@@ -43,7 +51,7 @@ const SignIn = ({ navigation }) => {
                 )}
             </Formik>
 
-            <Button text={'Geri'} onPress={handleLogin}/>
+            <Button text={'Geri'} onPress={handleLogin} />
         </SafeAreaView>
     )
 }

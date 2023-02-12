@@ -4,6 +4,7 @@ import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import { Formik } from 'formik'
 
+
 const Login = ({ navigation }) => {
 
     const initialValues = {
@@ -16,7 +17,7 @@ const Login = ({ navigation }) => {
     }
 
     const handleLogin = (formValues) => {
-        console.log(formValues)
+       
     }
 
     return (
