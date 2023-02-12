@@ -1,5 +1,5 @@
-import React from 'react'
-import { SafeAreaView, StyleSheet, Text } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, SafeAreaView, StyleSheet, Text } from 'react-native'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import { Formik } from 'formik'
@@ -7,7 +7,9 @@ import { Formik } from 'formik'
 import { register } from '../../firebase'
 
 
-const SignIn = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
+
+    const [loading, setLoading] = useState(false);
 
     const initialValues = {
         usermail: '',
@@ -20,11 +22,13 @@ const SignIn = ({ navigation }) => {
     }
 
     const handleFormSubmit = async (formValues) => {
-        console.log(formValues)
-
+        setLoading(true)
+        if (formValues.password !== formValues.repassword) {
+            return Alert.alert('Error: ', 'Passwords do not match!')
+        }
         const user = await register(formValues.usermail, formValues.password)
-        console.log(user)
-        
+        setLoading(false)
+        navigation.navigate('LoginPage')
 
     }
     return (
@@ -41,12 +45,16 @@ const SignIn = ({ navigation }) => {
                         <Input
                             placeholder='Şifre giriniz...'
                             value={values.password}
-                            onChangeText={handleChange('password')} />
+                            onChangeText={handleChange('password')}
+                            isSecure
+                        />
                         <Input
                             placeholder='Şifreyi tekrar giriniz...'
                             value={values.repassword}
-                            onChangeText={handleChange('repassword')} />
-                        <Button text={'Kayıt Ol'} onPress={handleSubmit} />
+                            onChangeText={handleChange('repassword')}
+                            isSecure
+                        />
+                        <Button text={'Kayıt Ol'} onPress={handleSubmit} loading={loading} />
                     </>
                 )}
             </Formik>
@@ -56,7 +64,7 @@ const SignIn = ({ navigation }) => {
     )
 }
 
-export default SignIn
+export default SignUp
 
 const styles = StyleSheet.create({
     container: {

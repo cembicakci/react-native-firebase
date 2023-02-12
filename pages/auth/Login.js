@@ -1,11 +1,14 @@
-import React from 'react'
-import { SafeAreaView, StyleSheet, Text } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, SafeAreaView, StyleSheet, Text } from 'react-native'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import { Formik } from 'formik'
+import { login } from '../../firebase'
 
 
 const Login = ({ navigation }) => {
+
+    const [loading, setLoading] = useState(false);
 
     const initialValues = {
         usermail: '',
@@ -13,11 +16,15 @@ const Login = ({ navigation }) => {
     }
 
     const handleSign = () => {
-        navigation.navigate('SignInPage')
+        navigation.navigate('SignUpPage')
     }
 
-    const handleLogin = (formValues) => {
-       
+    const handleLogin = async (formValues) => {
+        setLoading(true)
+        const user = await login(formValues.usermail, formValues.password)
+        navigation.navigate('MessagesPage')
+        setLoading(false)
+
     }
 
     return (
@@ -30,12 +37,15 @@ const Login = ({ navigation }) => {
                         <Input
                             placeholder='E-posta adresi giriniz...'
                             value={values.usermail}
-                            onChangeText={handleChange('usermail')} />
+                            onChangeText={handleChange('usermail')}
+                        />
                         <Input
                             placeholder='Şifre giriniz...'
                             value={values.password}
-                            onChangeText={handleChange('password')} />
-                        <Button text={'Giriş Yap'} onPress={handleSubmit} />
+                            onChangeText={handleChange('password')}
+                            isSecure
+                        />
+                        <Button text={'Giriş Yap'} onPress={handleSubmit} loading={loading} />
                     </>
                 )}
             </Formik>
