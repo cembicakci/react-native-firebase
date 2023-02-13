@@ -1,6 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { Alert } from "react-native";
+import { getFirestore, collection, doc, addDoc, onSnapshot } from "@firebase/firestore";
+import store from './redux/store'
+import { setText } from "./redux/textSlice";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD2bs_JkItkrYYk322DRdjAzBvoVVQRWeE",
@@ -14,6 +17,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
+export const db = getFirestore(app)
 
 export const register = async (usermail, password) => {
     try {
@@ -45,3 +49,14 @@ export const logout = async () => {
     }
 }
 
+export const addText = async (data) => {
+    const result = await addDoc(collection(db, 'texts'), data)
+}
+
+onSnapshot(collection(db, 'texts'), (doc) => {
+    store.dispatch((
+        setText(
+            doc.docs.reduce((texts, text) => [...texts, text.data()], [])
+        )
+    ))
+})
