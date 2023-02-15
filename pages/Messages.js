@@ -6,6 +6,7 @@ import { addText } from '../firebase';
 import uuid from 'react-native-uuid';
 import { getAuth } from 'firebase/auth';
 import { useSelector } from 'react-redux';
+import MessageCard from '../components/MessageCard/MessageCard';
 
 
 const Messages = () => {
@@ -35,7 +36,8 @@ const Messages = () => {
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={text}
-                renderItem={({item}) => <Text>{item.text}</Text>}
+                renderItem={({ item }) => <MessageCard item={item} />}
+                
             />
             <FloatingButton icon='plus' onPress={handleInputToggle} />
             <ModalComponent visible={inputModalVisible} onClose={handleInputToggle} onSend={handleSendContent} />
